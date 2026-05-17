@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: cabeleleilaleiladb
+    environment:
+      POSTGRES_USER: cabeleleilaleila
+      POSTGRES_PASSWORD: cabeleleilaleila
+      POSTGRES_DB: cabeleleilaleila
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - cabeleleila-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: cabeleleilaleilapgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: leila@leila.com.br
+      PGADMIN_DEFAULT_PASSWORD: leila
+    ports:
+      - "5050:80"
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - cabeleleila-network
+
+volumes:
+  pgdata:
+
+networks:
+  cabeleleila-network:
+    driver: bridge
