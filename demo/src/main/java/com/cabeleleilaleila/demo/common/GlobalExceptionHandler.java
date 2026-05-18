@@ -2,10 +2,7 @@ package com.cabeleleilaleila.demo.common;
 
 import com.cabeleleilaleila.demo.dto.ErroCampo;
 import com.cabeleleilaleila.demo.dto.ErroResposta;
-import com.cabeleleilaleila.demo.exception.CampoInvalidoException;
-import com.cabeleleilaleila.demo.exception.ClienteCadastradoException;
-import com.cabeleleilaleila.demo.exception.ClienteNaoEncontradoException;
-import com.cabeleleilaleila.demo.exception.RegistroDuplicadoException;
+import com.cabeleleilaleila.demo.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -85,6 +82,36 @@ public class GlobalExceptionHandler {
         return new ErroResposta(
                 404,
                 "Cliente não encontrado",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(AgendamentoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleAgendamentoNaoEncontrado(AgendamentoNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Agendamento nao encontrado",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(PagamentoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handlePagamentoNaoEncontrado(PagamentoNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Pagamento nao encontrado",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(HorarioDisponivelNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleHorarioDisponivelNaoEncontrado(HorarioDisponivelNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Horario disponivel nao encontrado",
                 List.of(new ErroCampo("id", e.getMessage()))
         );
     }

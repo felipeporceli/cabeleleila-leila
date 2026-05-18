@@ -18,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   jackson:
-    date-format: dd/MM/yyyy
+    date-format: dd/MM/yyyy HH:mm
     time-zone: America/Sao_Paulo
     deserialization:
       fail-on-unknown-properties: false
