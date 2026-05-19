@@ -115,4 +115,15 @@ public class GlobalExceptionHandler {
                 List.of(new ErroCampo("id", e.getMessage()))
         );
     }
+
+    @ExceptionHandler(AlteracaoNaoPermitidaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResposta handleAlteracaoNaoPermitida(AlteracaoNaoPermitidaException e) {
+        return new ErroResposta(
+                422,
+                "Alteração não permitida",
+                List.of(new ErroCampo("dataAgendamento", e.getMessage()))
+        );
+    }
+
 }

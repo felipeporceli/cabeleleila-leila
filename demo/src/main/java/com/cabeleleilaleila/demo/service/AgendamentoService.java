@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface AgendamentoService {
 
@@ -22,5 +23,13 @@ public interface AgendamentoService {
     AgendamentoResponseDTO atualizar(Integer id, AgendamentoUpdateRequestDTO dto);
 
     void deletar(Integer id);
+
+    List<AgendamentoResponseDTO> buscarHistorico(Integer clienteId,
+                                                 LocalDateTime dataInicio,
+                                                 LocalDateTime dataFim);
+
+    AgendamentoResponseDTO confirmar(Integer id);
+
+    List<AgendamentoResponseDTO> buscarAgendamentosDoDia(Integer cabeleireiroId, LocalDate data);
 
 }

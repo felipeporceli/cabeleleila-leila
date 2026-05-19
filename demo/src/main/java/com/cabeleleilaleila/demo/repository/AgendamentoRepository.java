@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Integer>,
@@ -21,7 +22,8 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
 
     List<Agendamento> findByClienteIdAndDataAgendamento(Integer clienteId, LocalDateTime dataAgendamento);
 
-    List<Agendamento> findByCabeleireiroIdAndDataAgendamento(Integer cabeleireiroId, LocalDateTime dataAgendamento);
+    Optional<Agendamento> findByCabeleireiroIdAndDataAgendamento(
+            Integer cabeleireiroId, LocalDateTime dataAgendamento);
 
     boolean existsByClienteIdAndDataAgendamento(Integer clienteId, LocalDateTime dataAgendamento);
 
@@ -30,5 +32,11 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
 
     List<Agendamento> findByCabeleireiroIdAndDataAgendamentoBetween(
             Integer cabeleireiroId, LocalDateTime dataInicio, LocalDateTime dataFim);
+
+    boolean existsByCabeleireiroIdAndDataAgendamento(Integer cabeleireiroId, LocalDateTime dataAgendamento);
+
+    List<Agendamento> findByDataAgendamentoBetween(LocalDateTime dataInicio, LocalDateTime dataFim);
+
+
 
 }
