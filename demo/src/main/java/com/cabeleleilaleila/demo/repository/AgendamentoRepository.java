@@ -38,5 +38,4 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     List<Agendamento> findByDataAgendamentoBetween(LocalDateTime dataInicio, LocalDateTime dataFim);
 
 
-
 }

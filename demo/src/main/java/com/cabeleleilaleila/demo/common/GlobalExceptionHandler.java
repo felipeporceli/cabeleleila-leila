@@ -126,4 +126,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ServicoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleServicoNaoEncontrado(ServicoNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Servico nao encontrado.",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
 }

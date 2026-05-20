@@ -38,13 +38,12 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Integer>,
             @Param("dataInicio") LocalDateTime dataInicio,
             @Param("dataFim") LocalDateTime dataFim);
 
-    List<Pagamento> findByAgendamentoCabeleireiroIdAndDataPagamentoBetweenAndStatusPagamento(
-            Integer cabeleireiroId,
+    List<Pagamento> findByDataPagamentoBetweenAndStatusPagamento(
             LocalDateTime dataInicio,
             LocalDateTime dataFim,
             StatusPagamentoEnum statusPagamento);
 
-    List<Pagamento> findByDataPagamentoBetweenAndStatusPagamento(
+    List<Pagamento> findByAgendamentoDataAgendamentoBetweenAndStatusPagamento(
             LocalDateTime dataInicio,
             LocalDateTime dataFim,
             StatusPagamentoEnum statusPagamento);

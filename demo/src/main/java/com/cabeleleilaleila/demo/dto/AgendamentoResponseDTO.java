@@ -4,7 +4,9 @@ import com.cabeleleilaleila.demo.model.enums.StatusAgendamentoEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class AgendamentoResponseDTO {
@@ -20,6 +22,8 @@ public class AgendamentoResponseDTO {
 
     private String observacoes;
     private StatusAgendamentoEnum statusAgendamento;
+    private List<ServicoResponseDTO> servicos;
+    private BigDecimal valorTotal;
     private String sugestao;
 
 }

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -39,6 +41,9 @@ public class Agendamento {
         @Enumerated(EnumType.STRING)
         @Column(name = "status_agendamento", nullable = false)
         private StatusAgendamentoEnum statusAgendamento = StatusAgendamentoEnum.AGENDADO;
+
+        @OneToMany(mappedBy = "agendamento", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<AgendamentoServico> servicos = new ArrayList<>();
 
 
 }

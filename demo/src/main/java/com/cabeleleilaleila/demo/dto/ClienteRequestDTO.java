@@ -34,7 +34,6 @@ public class ClienteRequestDTO {
     @NotBlank(message = "Campo obrigatorio")
     private String cidade;
 
-    @NotBlank(message = "Campo obrigatorio")
     private String complemento;
 
     @NotBlank(message = "Campo obrigatorio")

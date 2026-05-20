@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cabeleleila Leila</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ==================== LOGIN ==================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>Cabeleleila Leila</h1>
+    <p class="login-slogan">Cabelos, unhas, hidrata&ccedil;&otilde;es e muito mais</p>
+    <p class="login-subtitle">Sistema de Gerenciamento</p>
+    <form id="login-form">
+      <input type="text" id="login-user" placeholder="Usu&aacute;rio" required autocomplete="username">
+      <input type="password" id="login-pass" placeholder="Senha" required autocomplete="current-password">
+      <button type="submit" class="btn-primary btn-full">Entrar</button>
+    </form>
+    <div class="login-hints">
+      <p><strong>Admin:</strong> leila / leila123</p>
+      <p><strong>Cliente:</strong> cliente / cliente123</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div id="app-screen" style="display:none">
+
+  <header class="app-header">
+    <div class="header-brand">
+      <div>
+        <h1>Cabeleleila Leila</h1>
+        <span class="header-slogan">Cabelos, unhas, hidrata&ccedil;&otilde;es e unhas</span>
+      </div>
+    </div>
+    <div class="header-user">
+      <span>Ol&aacute;, <strong id="logged-user"></strong></span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <nav class="app-nav">
+    <button class="nav-btn admin-only" id="nav-clientes" onclick="showSection('clientes')">Clientes</button>
+    <button class="nav-btn" id="nav-cabeleireiros" onclick="showSection('cabeleireiros')">Cabeleireiros</button>
+    <button class="nav-btn" id="nav-agendamentos" onclick="showSection('agendamentos')">Agendamentos</button>
+    <button class="nav-btn admin-only" id="nav-horarios" onclick="showSection('horarios')">Hor&aacute;rios</button>
+    <button class="nav-btn client-only" id="nav-horarios-cliente" onclick="showSection('horarios-cliente')">Hor&aacute;rios</button>
+    <button class="nav-btn admin-only" id="nav-pagamentos" onclick="showSection('pagamentos')">Pagamentos</button>
+    <button class="nav-btn admin-only" id="nav-relatorio" onclick="showSection('relatorio')">Relat&oacute;rios</button>
+    <button class="nav-btn" id="nav-servicos" onclick="showSection('servicos')">Servi&ccedil;os</button>
+  </nav>
+
+  <main class="app-main">
+
+    <!-- ========== CLIENTES (admin-only) ========== -->
+    <section id="clientes-section" class="app-section admin-only">
+      <h2>Clientes</h2>
+
+      <div class="card" id="cliente-card">
+        <h3 id="cliente-form-title">Novo Cliente</h3>
+        <form id="cliente-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome *</label>
+              <input type="text" name="nome" required>
+            </div>
+            <div class="form-group">
+              <label>CPF *</label>
+              <input type="text" name="cpf" required placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+              <label>Senha</label>
+              <input type="password" name="senha" placeholder="Deixe em branco para manter">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label>Telefone *</label>
+              <input type="text" name="telefone" required placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+              <label>CEP</label>
+              <input type="text" name="cep" placeholder="00000-000">
+            </div>
+            <div class="form-group">
+              <label>Logradouro</label>
+              <input type="text" name="logradouro">
+            </div>
+            <div class="form-group">
+              <label>N&uacute;mero</label>
+              <input type="text" name="numero">
+            </div>
+            <div class="form-group">
+              <label>Bairro</label>
+              <input type="text" name="bairro">
+            </div>
+            <div class="form-group">
+              <label>Cidade</label>
+              <input type="text" name="cidade">
+            </div>
+            <div class="form-group">
+              <label>Complemento</label>
+              <input type="text" name="complemento">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditCliente()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Filtros</h3>
+        <form id="cliente-filter-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" name="nome">
+            </div>
+            <div class="form-group">
+              <label>CPF</label>
+              <input type="text" name="cpf">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email">
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" name="telefone">
+            </div>
+            <div class="form-group">
+              <label>CEP</label>
+              <input type="text" name="cep">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Pesquisar</button>
+            <button type="button" class="btn-secondary" onclick="clearClienteFilter()">Limpar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Nome</th><th>CPF</th><th>Email</th>
+                <th>Telefone</th><th>Cidade</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="clientes-tbody"></tbody>
+          </table>
+        </div>
+        <div id="clientes-pagination" class="pagination"></div>
+      </div>
+    </section>
+
+    <!-- ========== CABELEIREIROS (admin: CRUD / cliente: lista) ========== -->
+    <section id="cabeleireiros-section" class="app-section">
+      <h2>Cabeleireiros</h2>
+
+      <!-- ADMIN ONLY: formulário de cadastro/edição -->
+      <div class="card admin-only" id="cabeleireiro-card">
+        <h3 id="cabeleireiro-form-title">Novo Cabeleireiro</h3>
+        <form id="cabeleireiro-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome *</label>
+              <input type="text" name="nome" required>
+            </div>
+            <div class="form-group">
+              <label>CPF *</label>
+              <input type="text" name="cpf" required placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+              <label>Senha</label>
+              <input type="password" name="senha" placeholder="Deixe em branco para manter">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input type="text" name="telefone" placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+              <label>Especialidade *</label>
+              <select name="especialidade" required>
+                <option value="">Selecione...</option>
+                <option value="CORTE">Corte</option>
+                <option value="COLORACAO">Colora&ccedil;&atilde;o</option>
+                <option value="ESCOVA">Escova</option>
+                <option value="HIDRATACAO">Hidrata&ccedil;&atilde;o</option>
+                <option value="RELAXAMENTO">Relaxamento</option>
+                <option value="MANICURE">Manicure</option>
+                <option value="PEDICURE">Pedicure</option>
+                <option value="MAQUIAGEM">Maquiagem</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditCabeleireiro()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Filtros (visível para ambos) -->
+      <div class="card">
+        <h3>Filtros</h3>
+        <form id="cabeleireiro-filter-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome</label>
+              <input type="text" name="nome">
+            </div>
+            <div class="form-group admin-only">
+              <label>CPF</label>
+              <input type="text" name="cpf">
+            </div>
+            <div class="form-group admin-only">
+              <label>Email</label>
+              <input type="email" name="email">
+            </div>
+            <div class="form-group admin-only">
+              <label>Telefone</label>
+              <input type="text" name="telefone">
+            </div>
+            <div class="form-group">
+              <label>Especialidade</label>
+              <select name="especialidade">
+                <option value="">Todas</option>
+                <option value="CORTE">Corte</option>
+                <option value="COLORACAO">Colora&ccedil;&atilde;o</option>
+                <option value="ESCOVA">Escova</option>
+                <option value="HIDRATACAO">Hidrata&ccedil;&atilde;o</option>
+                <option value="RELAXAMENTO">Relaxamento</option>
+                <option value="MANICURE">Manicure</option>
+                <option value="PEDICURE">Pedicure</option>
+                <option value="MAQUIAGEM">Maquiagem</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Pesquisar</button>
+            <button type="button" class="btn-secondary" onclick="clearCabeleireiroFilter()">Limpar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabela (visível para ambos; botões de ação só para admin — controlado no JS) -->
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Nome</th><th>Especialidade</th>
+                <th>Email</th><th>Telefone</th><th class="admin-only">CPF</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="cabeleireiros-tbody"></tbody>
+          </table>
+        </div>
+        <div id="cabeleireiros-pagination" class="pagination"></div>
+      </div>
+    </section>
+
+    <!-- ========== AGENDAMENTOS ========== -->
+    <section id="agendamentos-section" class="app-section">
+      <h2>Agendamentos</h2>
+
+      <!-- Formulário de cadastro (visível para ambos) -->
+      <div class="card" id="agendamento-card">
+        <h3 id="agendamento-form-title">Novo Agendamento</h3>
+
+        <!-- Dica para o cliente -->
+        <div class="info-box client-only">
+          Selecione seu nome e o cabeleireiro desejado nas listas abaixo.
+        </div>
+
+        <form id="agendamento-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cliente *</label>
+              <select name="clienteId" required>
+                <option value="">Selecione o cliente...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cabeleireiro *</label>
+              <select name="cabeleireiroId" required>
+                <option value="">Selecione o cabeleireiro...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data e Hora *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataAgendamentoDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataAgendamentoHr" class="time-select" required></select>
+              </div>
+            </div>
+            <div class="form-group form-group-wide">
+              <label>Observa&ccedil;&otilde;es</label>
+              <textarea name="observacoes" rows="2"></textarea>
+            </div>
+          </div>
+
+          <!-- Seleção de serviços -->
+          <div class="servicos-selecao-wrapper">
+            <p class="servicos-selecao-titulo">Servi&ccedil;os</p>
+            <div id="servicos-selecao-grid" class="servicos-selecao-grid"></div>
+            <div id="servicos-resumo" class="servicos-resumo" style="display:none">
+              <div class="resumo-row">
+                <span class="resumo-label">Selecionados</span>
+                <span id="resumo-nomes"></span>
+              </div>
+              <div class="resumo-row">
+                <span class="resumo-label">Dura&ccedil;&atilde;o total</span>
+                <span id="resumo-duracao"></span>
+              </div>
+              <div class="resumo-row">
+                <span class="resumo-label">Valor total</span>
+                <strong id="resumo-valor"></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditAgendamento()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- CLIENTE ONLY: Meus Agendamentos -->
+      <div class="card client-only">
+        <h3>&#128197; Meus Agendamentos</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Cabeleireiro</th><th>Data/Hora</th>
+                <th>Status</th><th>Observa&ccedil;&otilde;es</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="meus-agendamentos-tbody"></tbody>
+          </table>
+        </div>
+        <div id="meus-agendamentos-pagination" class="pagination"></div>
+      </div>
+
+      <!-- ADMIN ONLY: filtros, tabela completa, histórico, dia -->
+      <div class="card admin-only">
+        <h3>Filtros</h3>
+        <form id="agendamento-filter-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cliente</label>
+              <select name="clienteId">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cabeleireiro</label>
+              <select name="cabeleireiroId">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataDt" placeholder="dd/mm/aaaa" maxlength="10">
+                <select name="dataHr" class="time-select"></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Pesquisar</button>
+            <button type="button" class="btn-secondary" onclick="clearAgendamentoFilter()">Limpar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card admin-only">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Cliente</th><th>Cabeleireiro</th>
+                <th>Data/Hora</th><th>Status</th><th>Sugest&atilde;o</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="agendamentos-tbody"></tbody>
+          </table>
+        </div>
+        <div id="agendamentos-pagination" class="pagination"></div>
+      </div>
+
+      <!-- Histórico -->
+      <div class="card admin-only">
+        <h3>Hist&oacute;rico de Agendamentos</h3>
+        <form id="historico-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cliente *</label>
+              <select name="clienteId" required>
+                <option value="">Selecione o cliente...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data In&iacute;cio *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataInicioDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataInicioHr" class="time-select" required></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Data Fim *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataFimDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataFimHr" class="time-select" required></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Buscar Hist&oacute;rico</button>
+          </div>
+        </form>
+        <div id="historico-results" style="display:none; margin-top:16px">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Cliente</th><th>Cabeleireiro</th>
+                  <th>Data/Hora</th><th>Status</th><th>Observa&ccedil;&otilde;es</th>
+                </tr>
+              </thead>
+              <tbody id="historico-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agendamentos por Período -->
+      <div class="card admin-only">
+        <h3>Agendamentos por Per&iacute;odo</h3>
+        <form id="dia-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro</label>
+              <select name="cabeleireiroId">
+                <option value="">Todos os cabeleireiros</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data In&iacute;cio *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataInicio" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataInicioHr" class="time-select"></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Data Fim *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataFim" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataFimHr" class="time-select"></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Buscar Agendamentos</button>
+          </div>
+        </form>
+        <div id="dia-results" style="display:none; margin-top:16px">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Cliente</th><th>Cabeleireiro</th><th>Data/Hora</th>
+                  <th>Status</th><th>Observa&ccedil;&otilde;es</th>
+                </tr>
+              </thead>
+              <tbody id="dia-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== HORÁRIOS (admin: CRUD completo) ========== -->
+    <section id="horarios-section" class="app-section admin-only">
+      <h2>Hor&aacute;rios Dispon&iacute;veis</h2>
+
+      <div class="card" id="horario-card">
+        <h3 id="horario-form-title">Novo Hor&aacute;rio Dispon&iacute;vel</h3>
+        <form id="horario-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro *</label>
+              <select name="cabeleireiroId" required>
+                <option value="">Selecione o cabeleireiro...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Dia da Semana *</label>
+              <select name="diaSemana" required>
+                <option value="">Selecione...</option>
+                <option value="SEGUNDA">Segunda-feira</option>
+                <option value="TERCA">Ter&ccedil;a-feira</option>
+                <option value="QUARTA">Quarta-feira</option>
+                <option value="QUINTA">Quinta-feira</option>
+                <option value="SEXTA">Sexta-feira</option>
+                <option value="SABADO">S&aacute;bado</option>
+                <option value="DOMINGO">Domingo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Hora In&iacute;cio *</label>
+              <input type="time" name="horaInicio" required>
+            </div>
+            <div class="form-group">
+              <label>Hora Fim *</label>
+              <input type="time" name="horaFim" required>
+            </div>
+            <div class="form-group">
+              <label>Intervalo (minutos) *</label>
+              <input type="number" name="intervaloMinutos" required min="1" placeholder="30">
+            </div>
+            <div class="form-group form-group-checkbox">
+              <label>
+                <input type="checkbox" name="ativo" checked>
+                Ativo
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditHorario()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Filtros</h3>
+        <form id="horario-filter-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro</label>
+              <select name="cabeleireiroId">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Dia da Semana</label>
+              <select name="diaSemana">
+                <option value="">Todos</option>
+                <option value="SEGUNDA">Segunda-feira</option>
+                <option value="TERCA">Ter&ccedil;a-feira</option>
+                <option value="QUARTA">Quarta-feira</option>
+                <option value="QUINTA">Quinta-feira</option>
+                <option value="SEXTA">Sexta-feira</option>
+                <option value="SABADO">S&aacute;bado</option>
+                <option value="DOMINGO">Domingo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="ativo">
+                <option value="">Todos</option>
+                <option value="true">Ativos</option>
+                <option value="false">Inativos</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Pesquisar</button>
+            <button type="button" class="btn-secondary" onclick="clearHorarioFilter()">Limpar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Cabeleireiro</th><th>Dia</th>
+                <th>In&iacute;cio</th><th>Fim</th><th>Intervalo</th><th>Ativo</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="horarios-tbody"></tbody>
+          </table>
+        </div>
+        <div id="horarios-pagination" class="pagination"></div>
+      </div>
+
+      <div class="card">
+        <h3>Hor&aacute;rios Dispon&iacute;veis por Data</h3>
+        <form id="horario-disponivel-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro *</label>
+              <select name="cabeleireiroId" required>
+                <option value="">Selecione o cabeleireiro...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data *</label>
+              <input type="text" class="input-date" name="data" placeholder="dd/mm/aaaa" maxlength="10" required>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Buscar Hor&aacute;rios</button>
+          </div>
+        </form>
+        <div id="horario-disponivel-results" style="display:none; margin-top:16px">
+          <h4>Hor&aacute;rios dispon&iacute;veis:</h4>
+          <ul id="horario-disponivel-list" class="horarios-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== HORÁRIOS (client-only: apenas consulta por data) ========== -->
+    <section id="horarios-cliente-section" class="app-section client-only">
+      <h2>Hor&aacute;rios Dispon&iacute;veis</h2>
+
+      <!-- Lista de cabeleireiros para referência -->
+      <div class="card">
+        <h3>Cabeleireiros Dispon&iacute;veis</h3>
+        <p style="color:#888;font-size:0.88rem;margin-bottom:14px">
+          Consulte os cabeleireiros e use o ID deles no formul&aacute;rio abaixo.
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Nome</th><th>Especialidade</th></tr>
+            </thead>
+            <tbody id="cab-lista-cliente-tbody"></tbody>
+          </table>
+        </div>
+        <div id="cab-lista-cliente-pagination" class="pagination"></div>
+      </div>
+
+      <!-- Busca de horários por data -->
+      <div class="card">
+        <h3>Consultar Hor&aacute;rios por Data</h3>
+        <p style="color:#888;font-size:0.88rem;margin-bottom:14px">
+          Informe o ID do cabeleireiro e a data para ver os hor&aacute;rios dispon&iacute;veis.
+        </p>
+        <form id="horario-cliente-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro *</label>
+              <select name="cabeleireiroId" required>
+                <option value="">Selecione o cabeleireiro...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data *</label>
+              <input type="text" class="input-date" name="data" placeholder="dd/mm/aaaa" maxlength="10" required>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Ver Hor&aacute;rios</button>
+          </div>
+        </form>
+        <div id="horario-cliente-results" style="display:none; margin-top:16px">
+          <h4>Hor&aacute;rios dispon&iacute;veis:</h4>
+          <ul id="horario-cliente-list" class="horarios-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGAMENTOS (admin-only) ========== -->
+    <section id="pagamentos-section" class="app-section admin-only">
+      <h2>Pagamentos</h2>
+
+      <div class="card" id="pagamento-card">
+        <h3 id="pagamento-form-title">Novo Pagamento</h3>
+        <form id="pagamento-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>ID do Agendamento *</label>
+              <input type="number" name="agendamentoId" required min="1">
+            </div>
+            <div class="form-group">
+              <label>Valor (R$) *</label>
+              <input type="number" name="valor" required min="0" step="0.01" placeholder="0,00">
+            </div>
+            <div class="form-group">
+              <label>Forma de Pagamento *</label>
+              <select name="formaPagamento" required>
+                <option value="">Selecione...</option>
+                <option value="PIX">PIX</option>
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="CARTAO_CREDITO">Cart&atilde;o de Cr&eacute;dito</option>
+                <option value="CARTAO_DEBITO">Cart&atilde;o de D&eacute;bito</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Status *</label>
+              <select name="statusPagamento" required>
+                <option value="">Selecione...</option>
+                <option value="PENDENTE">Pendente</option>
+                <option value="PAGO">Pago</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data do Pagamento *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataPagamentoDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataPagamentoHr" class="time-select" required></select>
+              </div>
+            </div>
+            <div class="form-group form-group-wide">
+              <label>Observa&ccedil;&otilde;es</label>
+              <textarea name="observacoes" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditPagamento()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Filtros</h3>
+        <form id="pagamento-filter-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>ID Agendamento</label>
+              <input type="number" name="agendamentoId" min="1">
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="statusPagamento">
+                <option value="">Todos</option>
+                <option value="PENDENTE">Pendente</option>
+                <option value="PAGO">Pago</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Forma de Pagamento</label>
+              <select name="formaPagamento">
+                <option value="">Todas</option>
+                <option value="PIX">PIX</option>
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="CARTAO_CREDITO">Cart&atilde;o de Cr&eacute;dito</option>
+                <option value="CARTAO_DEBITO">Cart&atilde;o de D&eacute;bito</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Pesquisar</button>
+            <button type="button" class="btn-secondary" onclick="clearPagamentoFilter()">Limpar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Agend.</th><th>Cliente</th><th>Valor</th>
+                <th>Forma</th><th>Status</th><th>Data Pagamento</th><th>A&ccedil;&otilde;es</th>
+              </tr>
+            </thead>
+            <tbody id="pagamentos-tbody"></tbody>
+          </table>
+        </div>
+        <div id="pagamentos-pagination" class="pagination"></div>
+      </div>
+
+      <div class="card">
+        <h3>Relat&oacute;rio de Faturamento por Cabeleireiro</h3>
+        <form id="relatorio-pagamento-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Cabeleireiro *</label>
+              <select name="cabeleireiroId" required>
+                <option value="">Selecione o cabeleireiro...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Data In&iacute;cio *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataInicioDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataInicioHr" class="time-select" required></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Data Fim *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataFimDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataFimHr" class="time-select" required></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Gerar Relat&oacute;rio</button>
+          </div>
+        </form>
+        <div id="relatorio-pagamento-result" style="display:none; margin-top:20px"></div>
+      </div>
+    </section>
+
+    <!-- ========== RELATÓRIO (admin-only) ========== -->
+    <section id="relatorio-section" class="app-section admin-only">
+      <h2>Relat&oacute;rio Semanal</h2>
+
+      <div class="card">
+        <h3>Gerar Relat&oacute;rio Semanal do Sal&atilde;o</h3>
+        <form id="relatorio-semanal-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Data In&iacute;cio *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataInicioDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataInicioHr" class="time-select" required></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Data Fim *</label>
+              <div class="datetime-split">
+                <input type="text" class="input-date" name="dataFimDt" placeholder="dd/mm/aaaa" maxlength="10" required>
+                <select name="dataFimHr" class="time-select" required></select>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Gerar Relat&oacute;rio</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="relatorio-semanal-result" class="card" style="display:none"></div>
+    </section>
+
+    <!-- ========== SERVIÇOS ========== -->
+    <section id="servicos-section" class="app-section">
+      <h2 class="admin-only">Gerenciar Servi&ccedil;os</h2>
+
+      <!-- Banner de apresentação para clientes -->
+      <div class="servicos-banner client-only">
+        <div class="servicos-banner-icon">&#9986;</div>
+        <div>
+          <h2 class="servicos-banner-titulo">Nossos Servi&ccedil;os</h2>
+          <p class="servicos-banner-sub">Conhe&ccedil;a tudo o que o Sal&atilde;o Cabeleleila Leila oferece para voc&ecirc;.</p>
+        </div>
+      </div>
+
+      <!-- Admin: formulário de cadastro/edição -->
+      <div class="card admin-only" id="servico-card">
+        <h3 id="servico-form-title">Novo Servi&ccedil;o</h3>
+        <form id="servico-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome *</label>
+              <input type="text" name="nome" required>
+            </div>
+            <div class="form-group">
+              <label>Dura&ccedil;&atilde;o (minutos) *</label>
+              <input type="number" name="duracaoMinutos" required min="1" placeholder="60">
+            </div>
+            <div class="form-group">
+              <label>Valor (R$) *</label>
+              <input type="number" name="valor" required min="0" step="0.01" placeholder="85,00">
+            </div>
+            <div class="form-group form-group-wide">
+              <label>Descri&ccedil;&atilde;o</label>
+              <textarea name="descricao" rows="2" placeholder="Descreva o servi&ccedil;o brevemente..."></textarea>
+            </div>
+            <div class="form-group form-group-checkbox">
+              <label>
+                <input type="checkbox" name="ativo" checked>
+                Ativo
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Salvar</button>
+            <button type="button" class="btn-secondary" onclick="cancelEditServico()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Cards de serviços (admin + cliente) -->
+      <div id="servicos-cards-grid" class="servicos-grid"></div>
+      <div id="servicos-pagination" class="pagination"></div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/js/app.js?v=7"></script>
+</body>
+</html>

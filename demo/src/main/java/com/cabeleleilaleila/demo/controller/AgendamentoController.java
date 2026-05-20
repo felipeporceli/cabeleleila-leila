@@ -102,16 +102,40 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoService.confirmar(id));
     }
 
-    @Operation(summary = "Agendamentos do dia", description = "Retorna todos os agendamentos do cabeleireiro em um dia específico")
+    @Operation(summary = "Cancelar agendamento", description = "Cancela um agendamento existente")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Agendamentos retornados com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Cabeleireiro não encontrado")
+            @ApiResponse(responseCode = "200", description = "Agendamento cancelado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado"),
+            @ApiResponse(responseCode = "422", description = "Agendamento não pode ser cancelado")
+    })
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<AgendamentoResponseDTO> cancelar(
+            @Parameter(description = "ID do agendamento") @PathVariable Integer id) {
+        return ResponseEntity.ok(agendamentoService.cancelar(id));
+    }
+
+    @Operation(summary = "Concluir agendamento", description = "Marca um agendamento como concluído")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Agendamento concluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Agendamento não encontrado"),
+            @ApiResponse(responseCode = "422", description = "Agendamento não pode ser concluído")
+    })
+    @PatchMapping("/{id}/concluir")
+    public ResponseEntity<AgendamentoResponseDTO> concluir(
+            @Parameter(description = "ID do agendamento") @PathVariable Integer id) {
+        return ResponseEntity.ok(agendamentoService.concluir(id));
+    }
+
+    @Operation(summary = "Agendamentos por período", description = "Retorna agendamentos em um período, opcionalmente filtrados por cabeleireiro")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Agendamentos retornados com sucesso")
     })
     @GetMapping("/dia")
-    public ResponseEntity<List<AgendamentoResponseDTO>> buscarAgendamentosDoDia(
-            @Parameter(description = "ID do cabeleireiro") @RequestParam(value = "cabeleireiro-id") Integer cabeleireiroId,
-            @Parameter(description = "Data (dd/MM/yyyy)") @RequestParam(value = "data") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate data) {
-        return ResponseEntity.ok(agendamentoService.buscarAgendamentosDoDia(cabeleireiroId, data));
+    public ResponseEntity<List<AgendamentoResponseDTO>> buscarAgendamentosPorPeriodo(
+            @Parameter(description = "ID do cabeleireiro (opcional)") @RequestParam(value = "cabeleireiro-id", required = false) Integer cabeleireiroId,
+            @Parameter(description = "Data início (dd/MM/yyyy)") @RequestParam(value = "data-inicio") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dataInicio,
+            @Parameter(description = "Data fim (dd/MM/yyyy)") @RequestParam(value = "data-fim") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dataFim) {
+        return ResponseEntity.ok(agendamentoService.buscarAgendamentosPorPeriodo(cabeleireiroId, dataInicio, dataFim));
     }
 
 }

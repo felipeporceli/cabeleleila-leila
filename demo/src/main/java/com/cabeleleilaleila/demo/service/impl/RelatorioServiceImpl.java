@@ -35,7 +35,7 @@ public class RelatorioServiceImpl implements RelatorioService {
 
         // Busca todos os pagamentos pagos do período
         List<Pagamento> pagamentos = pagamentoRepository
-                .findByDataPagamentoBetweenAndStatusPagamento(
+                .findByAgendamentoDataAgendamentoBetweenAndStatusPagamento(
                         dataInicio, dataFim, StatusPagamentoEnum.PAGO);
 
         // Conta por status

@@ -6,6 +6,7 @@ import com.cabeleleilaleila.demo.mapper.HorarioDisponivelMapper;
 import com.cabeleleilaleila.demo.model.Agendamento;
 import com.cabeleleilaleila.demo.model.HorarioDisponivel;
 import com.cabeleleilaleila.demo.model.enums.DiaSemanaEnum;
+import com.cabeleleilaleila.demo.model.enums.StatusAgendamentoEnum;
 import com.cabeleleilaleila.demo.repository.AgendamentoRepository;
 import com.cabeleleilaleila.demo.repository.HorarioDisponivelRepository;
 import com.cabeleleilaleila.demo.service.HorarioDisponivelService;
@@ -117,18 +118,34 @@ public class HorarioDisponivelServiceImpl implements HorarioDisponivelService {
             slotAtual = slotAtual.plusMinutes(horario.getIntervaloMinutos());
         }
 
-        // 4. Remove os horários já agendados
-        List<LocalDateTime> horariosAgendados = agendamentoRepository
+        // 4. Busca todos os agendamentos do cabeleireiro no dia
+        // 4. Busca todos os agendamentos do cabeleireiro no dia ignorando cancelados
+        List<Agendamento> agendamentosDoDia = agendamentoRepository
                 .findByCabeleireiroIdAndDataAgendamentoBetween(
                         cabeleireiroId,
                         data.with(horario.getHoraInicio()),
                         data.with(horario.getHoraFim()))
                 .stream()
-                .map(Agendamento::getDataAgendamento)
-                .map(h -> h.truncatedTo(ChronoUnit.MINUTES))
+                .filter(a -> !a.getStatusAgendamento().equals(StatusAgendamentoEnum.CANCELADO))
                 .toList();
 
-        slots.removeAll(horariosAgendados);
+        // 5. Remove os slots ocupados considerando a duração dos serviços
+        for (Agendamento agendamento : agendamentosDoDia) {
+            LocalDateTime inicioAgendamento = agendamento.getDataAgendamento()
+                    .truncatedTo(ChronoUnit.MINUTES);
+
+            // Calcula a duração total dos serviços do agendamento
+            int duracaoTotal = agendamento.getServicos().stream()
+                    .map(as -> as.getServico().getDuracaoMinutos())
+                    .mapToInt(Integer::intValue)
+                    .sum();
+
+            LocalDateTime fimAgendamento = inicioAgendamento.plusMinutes(duracaoTotal);
+
+            // Remove todos os slots que estão dentro do período do agendamento
+            slots.removeIf(slot ->
+                    !slot.isBefore(inicioAgendamento) && slot.isBefore(fimAgendamento));
+        }
 
         return slots;
     }

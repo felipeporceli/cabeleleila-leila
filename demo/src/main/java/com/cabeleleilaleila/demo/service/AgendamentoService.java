@@ -30,6 +30,10 @@ public interface AgendamentoService {
 
     AgendamentoResponseDTO confirmar(Integer id);
 
-    List<AgendamentoResponseDTO> buscarAgendamentosDoDia(Integer cabeleireiroId, LocalDate data);
+    AgendamentoResponseDTO concluir(Integer id);
+
+    AgendamentoResponseDTO cancelar(Integer id);
+
+    List<AgendamentoResponseDTO> buscarAgendamentosPorPeriodo(Integer cabeleireiroId, LocalDate dataInicio, LocalDate dataFim);
 
 }
