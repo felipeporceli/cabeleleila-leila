@@ -206,15 +206,14 @@ Sem essas variáveis definidas, a aplicação não conseguirá se conectar ao ba
 
 ### Passo a passo
 
-**1. Suba o banco de dados e o pgAdmin:**
+**1. Suba o banco de dados:**
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 Isso inicializa:
 - **PostgreSQL 17** na porta `5432`
-- **pgAdmin 4** na porta `5050`
 
 **2. Compile e execute a aplicação:**
 
@@ -237,16 +236,13 @@ java -jar target/demo-0.0.1-SNAPSHOT.jar
 |---|---|
 | Frontend (sistema web) | `http://localhost:8080` |
 | Swagger UI | `http://localhost:8080/swagger-ui/index.html` |
-| pgAdmin | `http://localhost:5050` |
 
-### Credenciais do banco e pgAdmin
+### Credenciais do banco
 
 | Serviço | Dado | Valor |
 |---|---|---|
 | PostgreSQL | Host | `localhost:5432` |
 | PostgreSQL | Usuário / Senha / Database | `cabeleleilaleila` / `cabeleleilaleila` / `cabeleleilaleila` |
-| pgAdmin | Login | `leila@leila.com.br` |
-| pgAdmin | Senha | `leila` |
 
 > O schema é criado automaticamente pelo Hibernate (`spring.jpa.hibernate.ddl-auto`) na primeira inicialização da aplicação.
 
