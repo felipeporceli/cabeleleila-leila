@@ -204,9 +204,21 @@ Sem essas variáveis definidas, a aplicação não conseguirá se conectar ao ba
 - Java 21 e Maven instalados (para rodar a aplicação)
 - Variáveis de ambiente `DB_URL`, `DB_USERNAME` e `DB_PASSWORD` configuradas (ver seção acima)
 
-### Passo a passo
+### Passo a passo 
 
-**1. Suba o banco de dados:**
+**1. Clone o repositório:**
+
+```bash
+git clone https://github.com/seu-usuario/cabeleleila-leila.git
+cd cabeleleila-leila
+```
+
+**2. Configure as variáveis de ambiente:**
+```bash
+cp .env.example .env
+```
+
+**3. Suba o banco de dados:**
 
 ```bash
 docker compose up -d --build
