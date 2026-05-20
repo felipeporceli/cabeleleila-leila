@@ -1,0 +1,1 @@
+-- Dump gerado por: docker exec cabeleleilaleiladb pg_dump -U cabeleleilaleila cabeleleilaleila > docker/init.sql
