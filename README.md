@@ -167,22 +167,32 @@ Recursos estáticos (frontend) e o Swagger UI são públicos, sem necessidade de
 
 ## Variáveis de ambiente
 
-A aplicação lê as configurações de banco via variáveis de ambiente. Elas devem estar definidas antes de executar — seja no sistema operacional, no arquivo `.env`, ou nas configurações de execução da IDE.
+O projeto usa um arquivo `.env` na raiz para centralizar as credenciais do banco. Esse arquivo é lido automaticamente pelo Docker Compose e deve ser configurado manualmente na IDE para a aplicação Spring Boot.
 
-| Variável | Valor padrão (Docker Compose) |
-|---|---|
-| `DB_URL` | `jdbc:postgresql://localhost:5432/cabeleleilaleila` |
-| `DB_USERNAME` | `cabeleleilaleila` |
-| `DB_PASSWORD` | `cabeleleilaleila` |
+**1. Crie o arquivo `.env` a partir do exemplo (já incluso no repositório):**
 
-**Configurando na IDE (IntelliJ IDEA / Eclipse):**
+```bash
+cp .env.example .env
+```
+
+O `.env` já vem preenchido com os valores padrão:
+
+```env
+DB_USERNAME=cabeleleilaleila
+DB_PASSWORD=cabeleleilaleila
+```
+
+> O arquivo `.env` está no `.gitignore` e não é versionado. O `.env.example` serve como template público.
+
+**2. Configure a IDE (IntelliJ IDEA / Eclipse):**
+
 Nas configurações de execução da aplicação (`Run/Debug Configurations`), adicione as três variáveis na aba **Environment variables**:
 
 ```
 DB_URL=jdbc:postgresql://localhost:5432/cabeleleilaleila;DB_USERNAME=cabeleleilaleila;DB_PASSWORD=cabeleleilaleila
 ```
 
-Sem essas variáveis definidas, a aplicação nao conseguirá se conectar ao banco e falhará na inicialização.
+Sem essas variáveis definidas, a aplicação não conseguirá se conectar ao banco e falhará na inicialização.
 
 ---
 

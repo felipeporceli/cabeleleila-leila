@@ -3,8 +3,8 @@ services:
     image: postgres:17
     container_name: cabeleleilaleiladb
     environment:
-      POSTGRES_USER: cabeleleilaleila
-      POSTGRES_PASSWORD: cabeleleilaleila
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: cabeleleilaleila
     ports:
       - "5432:5432"
